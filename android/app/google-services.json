@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "946413141417",
+    "project_id": "skillservice-22e0c",
+    "storage_bucket": "skillservice-22e0c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:946413141417:android:7013faa91d74cc0d8fd8b8",
+        "android_client_info": {
+          "package_name": "com.example.skillservice_frontend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "946413141417-9hekhukqdpdnfi8cup0vr3nbnma9qeuu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuC2F8yMciwpMVjEoysJNJ96yc-qnVEjc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "946413141417-9hekhukqdpdnfi8cup0vr3nbnma9qeuu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

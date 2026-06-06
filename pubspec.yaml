@@ -1,0 +1,34 @@
+name: skillservice_frontend
+description: A modern Skill-Swapping Platform built with Flutter and FastAPI.
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0' # This fixes your error
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # --- Authentication & Backend ---
+  firebase_core: ^2.24.2
+  firebase_auth: ^4.15.3
+  dio: ^5.4.0            # For FastAPI communication
+  provider: ^6.1.1       # State management
+
+  # --- UI & Design (Facebook Lite Aesthetic) ---
+  google_fonts: ^6.1.0
+  intl: ^0.19.0          # For date formatting (Birthdays)
+  font_awesome_flutter: ^10.6.0
+  cached_network_image: ^3.3.0
+  cupertino_icons: ^1.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  # If you have custom assets/images, list them here:
+  # assets:
+  #   - assets/images/
