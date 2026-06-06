@@ -1,6 +1,5 @@
-// lib/views/feed/feed_screen.dart
 import 'package:flutter/material.dart';
-import '../../core/app_theme.dart';
+import 'package:skillservice_frontend/core/app_theme.dart';
 
 class FeedScreen extends StatefulWidget {
   @override
@@ -26,18 +25,18 @@ class _FeedScreenState extends State<FeedScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text("Create Post", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            const Text("Create New Post", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 20),
-            TextField(decoration: InputDecoration(hintText: "What skill are you offering?", border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)))),
+            TextField(decoration: InputDecoration(hintText: "Post Title", border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)))),
             const SizedBox(height: 10),
-            TextField(maxLines: 3, decoration: InputDecoration(hintText: "Description...", border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)))),
+            TextField(maxLines: 3, decoration: InputDecoration(hintText: "Description & Skills needed...", border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)))),
             const SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: AppTheme.fbBlue),
+                style: ElevatedButton.styleFrom(backgroundColor: AppTheme.fbBlue, padding: const EdgeInsets.symmetric(vertical: 15)),
                 onPressed: () => Navigator.pop(context),
-                child: const Text("Post", style: TextStyle(color: Colors.white)),
+                child: const Text("Post to Community", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
               ),
             ),
             const SizedBox(height: 20),
@@ -52,17 +51,20 @@ class _FeedScreenState extends State<FeedScreen> {
     return Scaffold(
       appBar: AppBar(
         title: _buildSearchBar(),
+        actions: [
+          IconButton(icon: const Icon(Icons.notifications_none), onPressed: () {}),
+        ],
       ),
       body: Column(
         children: [
           _buildFilters(),
-          Expanded(child: ListView.builder(itemCount: 5, itemBuilder: (context, index) => _buildPostCard())),
+          Expanded(child: ListView.builder(itemCount: 8, itemBuilder: (context, index) => _buildPostCard())),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppTheme.fbBlue,
         onPressed: () => _showCreatePostModal(context),
-        child: const Icon(Icons.add, color: Colors.white),
+        child: const Icon(Icons.add, color: Colors.white, size: 30),
       ),
     );
   }
@@ -72,19 +74,26 @@ class _FeedScreenState extends State<FeedScreen> {
       height: 40,
       decoration: BoxDecoration(color: AppTheme.fbBg, borderRadius: BorderRadius.circular(20)),
       child: const TextField(
-        decoration: InputDecoration(hintText: "Search skills...", prefixIcon: Icon(Icons.search), border: InputBorder.none),
+        decoration: InputDecoration(
+          hintText: "Search for skills or services...", 
+          prefixIcon: Icon(Icons.search, size: 20), 
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.only(top: 5)
+        ),
       ),
     );
   }
 
   Widget _buildFilters() {
     return Container(
-      height: 50, color: Colors.white,
+      height: 60, color: Colors.white,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: ["All", "Skill Service", "Job Offer"].map((t) => ChoiceChip(
-          label: Text(t), selected: selectedType == t,
+          label: Text(t), 
+          selected: selectedType == t,
           onSelected: (s) => setState(() => selectedType = t),
+          selectedColor: AppTheme.fbBlue.withOpacity(0.2),
         )).toList(),
       ),
     );
@@ -92,22 +101,36 @@ class _FeedScreenState extends State<FeedScreen> {
 
   Widget _buildPostCard() {
     return Card(
-      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 0),
       elevation: 0,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       child: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("User Name", style: TextStyle(fontWeight: FontWeight.bold)),
-            const Text("Location • 2h ago", style: TextStyle(color: AppTheme.textGrey, fontSize: 12)),
-            const Padding(padding: EdgeInsets.symmetric(vertical: 8), child: Text("I am looking for a web developer to help with a project.")),
-            const Divider(),
+            Row(
+              children: [
+                CircleAvatar(backgroundColor: Colors.grey[300], child: const Icon(Icons.person, color: Colors.white)),
+                const SizedBox(width: 12),
+                const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Skill Provider", style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text("Manila • 3h ago", style: TextStyle(color: AppTheme.textGrey, fontSize: 12)),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            const Text("Offering Flutter Mobile Development lessons in exchange for Advanced UI/UX Design tutoring.", style: TextStyle(fontSize: 15)),
+            const SizedBox(height: 12),
+            const Divider(height: 1),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                TextButton.icon(onPressed: () {}, icon: const Icon(Icons.comment_outlined, size: 18), label: const Text("Comment")),
-                TextButton.icon(onPressed: () {}, icon: const Icon(Icons.handshake_outlined, size: 18), label: const Text("Apply")),
+                _actionBtn(Icons.comment_outlined, "Comment"),
+                _actionBtn(Icons.handshake_outlined, "Apply / Book"),
               ],
             )
           ],
@@ -115,4 +138,10 @@ class _FeedScreenState extends State<FeedScreen> {
       ),
     );
   }
+
+  Widget _actionBtn(IconData i, String l) => TextButton.icon(
+    onPressed: () {}, 
+    icon: Icon(i, size: 20, color: AppTheme.textGrey), 
+    label: Text(l, style: const TextStyle(color: AppTheme.textGrey))
+  );
 }
