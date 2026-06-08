@@ -1,10 +1,10 @@
 // lib/views/auth/verification_screen.dart
 import 'package:flutter/material.dart';
-// firebase auth is accessed via provider where needed
 import 'package:provider/provider.dart';
 import 'package:skillservice_frontend/providers/auth_provider.dart';
 import 'package:skillservice_frontend/views/layout/main_layout.dart';
 import 'package:skillservice_frontend/core/app_theme.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class VerificationScreen extends StatefulWidget {
   const VerificationScreen({Key? key}) : super(key: key);
@@ -65,45 +65,76 @@ class _VerificationScreenState extends State<VerificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Verify Your Email")),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Text("Verify Your Email", style: GoogleFonts.inter(fontWeight: FontWeight.w600)),
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(32.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.mark_email_unread,
-                size: 100, color: AppTheme.fbBlue),
-            const SizedBox(height: 20),
-            const Text(
+            Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                color: AppTheme.primary.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(28),
+              ),
+              child: const Icon(Icons.mark_email_unread, size: 56, color: AppTheme.primary),
+            ),
+            const SizedBox(height: 24),
+            Text(
+              "Verify Your Email",
+              style: GoogleFonts.inter(fontWeight: FontWeight.w700, fontSize: 22, color: AppTheme.textPrimary),
+            ),
+            const SizedBox(height: 12),
+            Text(
               "We've sent a verification link to your email. Please click the link to activate your account.",
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16),
+              style: GoogleFonts.inter(fontSize: 15, color: AppTheme.textSecondary, height: 1.4),
             ),
             const SizedBox(height: 40),
             SizedBox(
-              width: double.infinity,
+              width: double.infinity, height: 52,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: AppTheme.fbBlue,
-                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  backgroundColor: AppTheme.primary,
+                  foregroundColor: Colors.white,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                 ),
                 onPressed: _isVerifying ? null : _checkVerificationStatus,
                 child: _isVerifying
-                    ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text("I have verified my email",
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold)),
+                    ? const SizedBox(width: 22, height: 22, child: CircularProgressIndicator(strokeWidth: 2.5, color: Colors.white))
+                    : Text("I have verified my email", style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 16, color: Colors.white)),
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity, height: 52,
+              child: OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: AppTheme.primary,
+                  side: BorderSide(color: AppTheme.primary.withValues(alpha: 0.3)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                ),
+                onPressed: _isResending ? null : _resendVerificationEmail,
+                child: _isResending
+                    ? const SizedBox(width: 22, height: 22, child: CircularProgressIndicator(strokeWidth: 2.5))
+                    : Text("Resend verification email", style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 16)),
+              ),
+            ),
+            const SizedBox(height: 24),
             TextButton(
-              onPressed: _isResending ? null : _resendVerificationEmail,
-              child: _isResending
-                  ? const SizedBox(
-                      width: 18,
-                      height: 18,
-                      child: CircularProgressIndicator(strokeWidth: 2))
-                  : const Text("Resend verification email"),
+              onPressed: () {
+                final auth = Provider.of<SkillAuthProvider>(context, listen: false);
+                auth.logout();
+              },
+              child: Text("Back to Login", style: GoogleFonts.inter(color: AppTheme.textSecondary, fontWeight: FontWeight.w500)),
             ),
           ],
         ),

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:dio/dio.dart';
 import 'package:skillservice_frontend/core/app_theme.dart';
 import 'dart:async';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:skillservice_frontend/providers/auth_provider.dart';
 import 'package:skillservice_frontend/core/api_service.dart';
 
@@ -77,27 +78,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     final auth = context.watch<SkillAuthProvider>();
     return Scaffold(
-      appBar: AppBar(title: const Text("Create Account")),
+      appBar: AppBar(title: Text("Create Account", style: GoogleFonts.inter(fontWeight: FontWeight.w600))),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
           children: [
-            TextField(controller: _fName, decoration: const InputDecoration(hintText: "First Name", prefixIcon: Icon(Icons.person))),
-            const SizedBox(height: 12),
-            TextField(controller: _lName, decoration: const InputDecoration(hintText: "Last Name", prefixIcon: Icon(Icons.person))),
-            const SizedBox(height: 12),
-            TextField(controller: _email, decoration: const InputDecoration(hintText: "Email", prefixIcon: Icon(Icons.email))),
-            const SizedBox(height: 12),
-            TextField(controller: _pass, obscureText: true, decoration: const InputDecoration(hintText: "Password", prefixIcon: Icon(Icons.lock))),
-            const SizedBox(height: 12),
-            TextField(controller: _bDay, readOnly: true, onTap: _pickDate, decoration: const InputDecoration(hintText: "Birthday (Click here)", prefixIcon: Icon(Icons.cake))),
-            const SizedBox(height: 12),
+            const SizedBox(height: 8),
+            TextField(controller: _fName, decoration: const InputDecoration(hintText: "First Name", prefixIcon: Icon(Icons.person_outline))),
+            const SizedBox(height: 14),
+            TextField(controller: _lName, decoration: const InputDecoration(hintText: "Last Name", prefixIcon: Icon(Icons.person_outline))),
+            const SizedBox(height: 14),
+            TextField(controller: _email, decoration: const InputDecoration(hintText: "Email", prefixIcon: Icon(Icons.email_outlined))),
+            const SizedBox(height: 14),
+            TextField(controller: _pass, obscureText: true, decoration: const InputDecoration(hintText: "Password", prefixIcon: Icon(Icons.lock_outline))),
+            const SizedBox(height: 14),
+            TextField(controller: _bDay, readOnly: true, onTap: _pickDate, decoration: const InputDecoration(hintText: "Birthday (Click here)", prefixIcon: Icon(Icons.cake_outlined))),
+            const SizedBox(height: 14),
             TextField(
               controller: _loc,
               onChanged: _onAddressChanged,
               decoration: InputDecoration(
                 hintText: "Address",
-                prefixIcon: const Icon(Icons.location_on),
+                prefixIcon: const Icon(Icons.location_on_outlined),
                 suffixIcon: _addressLoading
                   ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 1.5))
                   : null,
@@ -109,7 +111,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 margin: const EdgeInsets.only(top: 4),
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey.shade300),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 child: ListView.builder(
                   shrinkWrap: true,
@@ -117,7 +119,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   itemCount: _addressSuggestions.length,
                   itemBuilder: (context, i) => ListTile(
                     dense: true,
-                    title: Text(_addressSuggestions[i], style: const TextStyle(fontSize: 14)),
+                    title: Text(_addressSuggestions[i], style: GoogleFonts.inter(fontSize: 13)),
                     onTap: () {
                       _loc.text = _addressSuggestions[i];
                       _loc.selection = TextSelection.fromPosition(TextPosition(offset: _loc.text.length));
@@ -126,28 +128,40 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
               ),
-            const SizedBox(height: 20),
-            Row(children: [
-              const Icon(Icons.transgender, color: AppTheme.textGrey),
-              const SizedBox(width: 12),
-              Expanded(
-                child: DropdownButtonFormField<String>(
-                  initialValue: _gender,
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+              decoration: BoxDecoration(
+                border: Border.all(color: AppTheme.border),
+                borderRadius: BorderRadius.circular(12),
+              ),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButtonFormField<String>(
+                    initialValue: _gender,
                   items: const [
                     DropdownMenuItem(value: 'Male', child: Text('Male')),
                     DropdownMenuItem(value: 'Female', child: Text('Female')),
                     DropdownMenuItem(value: 'Other', child: Text('Other')),
                   ],
                   onChanged: (v) => setState(() => _gender = v ?? _gender),
-                  decoration: const InputDecoration(border: OutlineInputBorder(), contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10)),
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.symmetric(vertical: 8),
+                    prefixIcon: Icon(Icons.transgender),
+                  ),
                 ),
-              )
-            ]),
+              ),
+            ),
             const SizedBox(height: 30),
             SizedBox(
-              width: double.infinity, height: 55,
+              width: double.infinity, height: 52,
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: AppTheme.fbBlue),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppTheme.primary,
+                  foregroundColor: Colors.white,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                ),
                 onPressed: () async {
                   if (_fName.text.trim().isEmpty || _lName.text.trim().isEmpty || _email.text.trim().isEmpty || _pass.text.trim().isEmpty || _bDay.text.trim().isEmpty || _loc.text.trim().isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Please fill in all fields")));
@@ -166,9 +180,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
                   }
                 },
-                child: auth.isLoading ? const CircularProgressIndicator(color: Colors.white) : const Text("Sign Up", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                child: auth.isLoading
+                  ? const SizedBox(width: 22, height: 22, child: CircularProgressIndicator(strokeWidth: 2.5, color: Colors.white))
+                  : Text("Sign Up", style: GoogleFonts.inter(fontWeight: FontWeight.w600, fontSize: 16, color: Colors.white)),
               ),
             ),
+            const SizedBox(height: 40),
           ],
         ),
       ),

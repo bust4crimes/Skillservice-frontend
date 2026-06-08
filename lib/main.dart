@@ -6,6 +6,7 @@ import 'package:skillservice_frontend/core/app_theme.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 // main uses only built-in icons where possible
 import 'package:skillservice_frontend/providers/auth_provider.dart';
+import 'package:skillservice_frontend/providers/theme_provider.dart';
 import 'package:skillservice_frontend/views/auth/login_screen.dart';
 import 'package:skillservice_frontend/views/auth/verification_screen.dart';
 import 'package:skillservice_frontend/views/feed/feed_screen.dart';
@@ -17,7 +18,10 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await Hive.initFlutter();
   await Hive.openBox('chat_messages');
-  runApp(MultiProvider(providers: [ChangeNotifierProvider(create: (_) => SkillAuthProvider())], child: const SkillServiceApp()));
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (_) => ThemeProvider()),
+    ChangeNotifierProvider(create: (_) => SkillAuthProvider()),
+  ], child: const SkillServiceApp()));
 }
 
 class SkillServiceApp extends StatelessWidget {
@@ -27,6 +31,8 @@ class SkillServiceApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: context.watch<ThemeProvider>().isDark ? ThemeMode.dark : ThemeMode.light,
       home: Consumer<SkillAuthProvider>(
         builder: (context, auth, _) {
           if (auth.user == null) return const LoginScreen();
