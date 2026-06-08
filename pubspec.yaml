@@ -1,29 +1,43 @@
 name: skillservice_frontend
-description: "A modern Skill-Swapping Platform built with Flutter and FastAPI."
-publish_to: 'none'
-version: 1.0.0+1
-
 environment:
   sdk: '>=3.0.0 <4.0.0'
-
 dependencies:
   flutter:
     sdk: flutter
-  
-  firebase_core: ^3.1.1
-  firebase_auth: ^5.1.1
-  dio: ^5.5.0
-  provider: ^6.1.2
-  google_fonts: ^6.2.1
-  intl: ^0.19.0
-  font_awesome_flutter: ^10.7.0
-  cached_network_image: ^3.3.1
+  firebase_core: ^4.10.0
+  firebase_auth: ^6.5.2
+  dio: ^5.4.0
+  google_fonts: ^6.1.0
+  image_picker: ^1.0.7
+  web_socket_channel: ^2.4.0
+  provider: ^6.1.1
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  path_provider: ^2.0.14
+  cached_network_image: ^3.2.3
+  path: ^1.8.3
+  http: ^1.6.0
+  country_icons: ^2.0.0
   cupertino_icons: ^1.0.8
+  flutter_svg: ^1.1.6
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.0
+  flutter_lints: ^2.0.1
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/flags/
+    - assets/icons/
+    - assets/data/
+    - assets/icons/home.svg
+    - assets/icons/home.svg
+    - assets/icons/chat.svg
+    - assets/icons/bell.svg
+    - assets/icons/user.svg
+    - assets/icons/menu.svg
+    - assets/icons/mail.svg
+    - assets/icons/handshake.svg

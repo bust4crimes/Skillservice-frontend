@@ -1,17 +1,37 @@
+// lib/core/api_service.dart
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 
 class ApiService {
-  // Your Render Backend URL
-  static const String backendBaseUrl = "https://skillservice-backend.onrender.com";
-  
-  final Dio dio = Dio(BaseOptions(
-    baseUrl: backendBaseUrl,
-    headers: {"Content-Type": "application/json"},
-    connectTimeout: const Duration(seconds: 15),
-  ));
+  late Dio _dio;
 
-  // Singleton pattern
-  static final ApiService _instance = ApiService._internal();
-  factory ApiService() => _instance;
-  ApiService._internal();
+  ApiService() {
+    _dio = Dio(BaseOptions(
+      baseUrl: "https://skillservice-backend.onrender.com",
+      connectTimeout: const Duration(seconds: 30),
+      receiveTimeout: const Duration(seconds: 30),
+    ));
+
+    _dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) async {
+        User? user = FirebaseAuth.instance.currentUser;
+        if (user != null) {
+          String token = await user.getIdToken(true) ?? '';
+          options.headers['Authorization'] = 'Bearer $token';
+        }
+        return handler.next(options);
+      },
+      onError: (DioException e, handler) {
+        // Use kDebugMode guard and print for simpler analysis output
+        if (kDebugMode) {
+          print("Backend Error: ${e.response?.statusCode} - ${e.message} - ${e.response?.data}");
+        }
+        return handler.next(e);
+      }
+    ));
+  }
+
+  Dio get client => _dio;
+  Dio get dio => _dio;
 }
